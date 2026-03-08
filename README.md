@@ -24,6 +24,49 @@
 
 *Descreva seu projeto com base no texto do PBL (até 600 palavras)*
 
+## Parte 1 – Dados Numéricos (IoT)
+
+Nesta seção, realizamos a análise exploratória e técnica do dataset `cardio_train.csv`, que compõe a base de dados numéricos (IoT) do ecossistema CardioIA. O dataset é composto por registros clínicos de pacientes, totalizando 70.000 linhas e 13 colunas.
+
+### Metadados do Dataset
+
+| Variável | Descrição | Tipo de Dado |
+| :--- | :--- | :--- |
+| **id** | Identificador único do paciente | Inteiro |
+| **age** | Idade do paciente (em dias) | Inteiro |
+| **gender** | Gênero (1: Feminino, 2: Masculino) | Categórico |
+| **height** | Altura (cm) | Inteiro |
+| **weight** | Peso (kg) | Float |
+| **ap_hi** | Pressão Arterial Sistólica | Inteiro |
+| **ap_lo** | Pressão Arterial Diastólica | Inteiro |
+| **cholesterol** | Nível de Colesterol (1: Normal, 2: Acima, 3: Muito Acima) | Categórico |
+| **gluc** | Nível de Glicose (1: Normal, 2: Acima, 3: Muito Acima) | Categórico |
+| **smoke** | Fumante (0: Não, 1: Sim) | Binário |
+| **alco** | Consumo de Álcool (0: Não, 1: Sim) | Binário |
+| **active** | Atividade Física (0: Não, 1: Sim) | Binário |
+| **cardio** | Presença de Doença Cardiovascular (Alvo) | Binário |
+
+### Destaque Clínico e Justificativa de IA
+
+Para o treinamento do modelo de Machine Learning, destacamos as seguintes variáveis core:
+
+1.  **Pressão Arterial Sistólica (ap_hi):** É o indicador de maior peso para a predição de risco cardiovascular; variações súbitas ou crônicas são cruciais para a detecção de anomalias e predição de hipertensão.
+2.  **Colesterol (cholesterol):** Atua como uma variável categórica de risco metabólico. Sua forte correlação com a ocorrência de aterosclerose torna-a indispensável para modelos de classificação.
+3.  **Idade (age):** A idade é o fator de base para qualquer escore de risco clínico, permitindo ao algoritmo ponderar a progressão de doenças crônicas não transmissíveis (DANTs).
+4.  **Peso (weight):** Fundamental para o cálculo de índices de massa corpórea (IMC) e avaliação de riscos associados à obesidade, servindo como uma variável explicativa de suporte.
+
+**Justificativa Técnica:** Estas variáveis foram selecionadas devido à sua alta **correlação estatística** com o desfecho clínico (`cardio`). Em modelos de aprendizagem supervisionada, a inclusão desses biomarcadores permite uma maior precisão na **predição de risco**, visto que representam os pilares da fisiopatologia cardiovascular. A presença de outliers nos dados de pressão arterial reforça a necessidade de algoritmos de detecção de anomalias durante a fase de pré-processamento.
+
+### Análise Descritiva e Origem dos Dados
+
+Através de um script de análise descritiva, extraímos os seguintes insights populacionais do dataset:
+*   **Média de Idade:** 53,33 anos.
+*   **Distribuição de Gênero:** Aproximadamente 65% de mulheres (45.530 registros) e 35% de homens (24.470 registros).
+
+> **Nota Metodológica:** Os dados populacionais acima descritos são apresentados exclusivamente de forma visual e didática. Eles refletem apenas a amostra contida neste dataset específico e podem não representar uma tendência epidemiológica global ou regional.
+
+**Fonte dos Dados:** O dataset utilizado nesta análise foi obtido via [Kaggle - Cardiovascular Disease Dataset](https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset).
+
 ## Documentos usados
 
 ### Resumo das Obras Selecionadas
