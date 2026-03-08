@@ -11,13 +11,13 @@
 ## Nome do grupo
 
 ## 👨‍🎓 Integrantes: 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 1</a>
+- <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
 
 ## 👩‍🏫 Professores:
 ### Tutor(a) 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do Tutor</a>
+- Caique Nonato
 ### Coordenador(a)
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do Coordenador</a>
+- André Godoi Chiovato
 
 
 ## 📜 Descrição
@@ -67,7 +67,7 @@ Através de um script de análise descritiva, extraímos os seguintes insights p
 
 **Fonte dos Dados:** O dataset utilizado nesta análise foi obtido via [Kaggle - Cardiovascular Disease Dataset](https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset).
 
-## Documentos usados
+## Parte 2 - Documentos usados
 
 ### Resumo das Obras Selecionadas
 Selecionamos cinco obras fundamentais que cruzam a história da medicina, a saúde pública brasileira e o estado da arte em tecnologia. O objetivo é fornecer uma base textual rica e diversificada para o processamento de linguagem natural.
@@ -95,7 +95,22 @@ A integração desses textos no CardioIA não é apenas documental; eles servem 
 * **Análise de Sentimento e Semântica em Saúde:** O Plano DANT permite analisar o "tom" das políticas públicas e a urgência de certas patologias, enquanto os relatos de casos históricos ajudam a entender a evolução da descrição da dor e do desconforto pelo paciente.
 * **Sumarização e Classificação Automática:** Com artigos densos como o de "Impacto da IA", podemos treinar modelos para gerar resumos executivos para médicos ou classificar automaticamente novos artigos científicos que entrem na base de dados do hospital, mantendo o ecossistema sempre atualizado.
 
---
+---
+
+## Parte 3 – Dados Visuais (VC)
+
+Nesta etapa, o ecossistema CardioIA incorpora o processamento de bioimagens para diagnósticos de precisão. O dataset visual é composto por exames de Eletrocardiograma (ECG) nos formatos `.jpg`, organizados em categorias clínicas (Normal, Infarto do Miocárdio, Histórico de Infarto Posterior e Arritmias).
+
+### Estratégia de Armazenamento e Governança
+Em conformidade com as boas práticas de governança de dados e para garantir a performance do versionamento via Git, este repositório armazena apenas uma **amostra representativa** das imagens em `datasets/images`. O volume massivo de dados utilizado para o treinamento exaustivo dos modelos está hospedado em:
+*   **Dataset Completo:** [ECG Image Dataset - Kaggle](https://www.kaggle.com/datasets/evilspirit05/ecg-analysis)
+
+### Justificativa de IA (Visão Computacional)
+A utilização de algoritmos de Visão Computacional (VC) é fundamental para a interpretação automatizada de traçados eletrocardiográficos. Através de Redes Neurais Convolucionais (CNNs), o sistema é capaz de realizar a **identificação de bordas** e a **segmentação de complexos QRS**, permitindo a detecção precoce de padrões de arritmia e isquemia que podem ser imperceptíveis em uma análise visual rápida.
+
+**Classificador de Patologias:** Especificamente, o processamento destas imagens permite treinar um classificador multirrótulo para identificar patologias específicas presentes nos traçados. Ao correlacionar as variações morfológicas das ondas com as classes do dataset (ex: *Myocardial Infarction*), o CardioIA atua como uma ferramenta de suporte à decisão clínica, aumentando a acurácia diagnóstica e reduzindo o tempo de resposta em casos críticos de emergência cardiológica.
+
+---
 
 ### Papel no Projeto CardioIA
 
@@ -114,6 +129,8 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 - <b>assets</b>: aqui estão os arquivos relacionados a elementos não-estruturados deste repositório, como imagens.
 
 - <b>docs</b>: Artigos, citações, documentos e livros relacioados ao projeto que serão usados para treinamento e refinamento de algoritmos de ML e IA.
+
+- <b>datasets</b>: aqui estão os arquivos relacionados a dados do projeto.
 
 - <b>README.md</b>: arquivo que serve como guia e explicação geral sobre o projeto (o mesmo que você está lendo agora).
 
