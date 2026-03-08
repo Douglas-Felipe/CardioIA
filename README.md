@@ -6,9 +6,7 @@
 
 <br>
 
-# Nome do projeto
-
-## Nome do grupo
+# CardioIA
 
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
@@ -18,11 +16,6 @@
 - Caique Nonato
 ### Coordenador(a)
 - André Godoi Chiovato
-
-
-## 📜 Descrição
-
-*Descreva seu projeto com base no texto do PBL (até 600 palavras)*
 
 ## Parte 1 – Dados Numéricos (IoT)
 
