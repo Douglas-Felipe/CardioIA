@@ -111,11 +111,45 @@ Estes dados textuais formam o "cérebro interpretativo" da plataforma. Enquanto 
 
 ---
 
+## Parte 4 – Frases de sintomas + extração de informações
 
+Esta fase implementa um "estetoscópio digital" rodando em Inteligência Artificial para Diagnóstico. Criamos um motor de Processamento de Linguagem Natural (NLP) usando **spaCy** e **Scikit-learn** capaz de analisar um texto de um paciente, extrair as informações cruciais (lematização e filtragem sintática de sujeitos/verbos), e correlacionar com uma ontologia de doenças previamente mapeada por vetores matemáticos.
+
+Os artefatos produzidos encontram-se rigorosamente distribuídos em módulos na pasta `api/`:
+* `api/data/`: Diretório contendo os casos de uso das queixas (`relatos.txt`) e a ontologia teórica extraída dos livros médicos (`ontologia.csv`).
+* `api/core/`: Regras de negócio essenciais.
+* `api/infrastructure/`: Adaptadores responsáveis pela predição e leitura robusta.
+* `api/tests/`: Suite de testes.
+* `api/main.py`: O Script Pai que inicializa e orquestra a aplicação.
+
+### Como Executar e Testar
+
+Acesse a subpasta `api`, configure o ambiente virtual suportando o modelo neutro brasileiro (`pt_core_news_sm`):
+
+```bash
+cd api
+python -m venv .venv
+# Ativar venv no Windows:
+.\.venv\Scripts\activate
+# Ativar venv no Linux/Mac:
+source .venv/bin/activate
+
+# Instale as dependências da Machine Learning
+pip install -r requirements.txt
+python -m spacy download pt_core_news_sm
+
+# Rodar Pipeline principal de triagem:
+python main.py
+
+# Validar se todo o framework de abstração resiste:
+pytest tests/ -v
+```
 
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
+
+- <b>api</b>: A central de código que abriga a Inteligência Artificial e a Arquitetura do Projeto Separada por módulos (`core`, `infrastructure`, `tests`).
 
 - <b>.github</b>: Nesta pasta ficarão os arquivos de configuração específicos do GitHub que ajudam a gerenciar e automatizar processos no repositório.
 
@@ -130,6 +164,9 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
+* 0.2.0 - 05/04/2026
+    * 0.2.1 - 05/04/2026
+        * Parte 1 – Frases de sintomas + extração de informações
 * 0.1.0 - 10/03/2026
     * Estruturação do projeto
     * Obtenção dos dados
