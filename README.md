@@ -144,12 +144,30 @@ python main.py
 # Validar se todo o framework de abstração resiste:
 pytest tests/ -v
 ```
+## Parte 5 – Classificador de Risco (ML)
+
+Esta fase representa a inteligência preditiva do CardioIA voltada para a triagem de urgência. Foi desenvolvido um **Classificador de Texto** que categoriza automaticamente os relatos de sintomas em "Baixo Risco" ou "Alto Risco", permitindo uma priorização baseada em dados clínicos.
+
+### Implementação de Machine Learning
+O modelo utiliza um pipeline de Processamento de Linguagem Natural e Aprendizagem Supervisionada:
+*   **Vetorização:** TF-IDF (*Term Frequency-Inverse Document Frequency*) para transformar sintomas em vetores matemáticos, priorizando palavras-chave clínicas.
+*   **Algoritmo:** **SVM (Support Vector Machine)**, selecionado após testes comparativos com diversos algoritmos por apresentar o melhor **Recall para 'Alto Risco'**.
+*   **Foco em Segurança:** O modelo foi treinado para minimizar falsos negativos, garantindo que pacientes em estado crítico recebam a classificação de urgência correta.
+
+### Ambiente de Experimentação (`notebooks/`)
+Os dados e o laboratório de desenvolvimento estão organizados para garantir a reprodutibilidade:
+*   `api/notebooks/classificador_risco.ipynb`: Notebook com a análise exploratória, treino e comparação de métricas.
+*   `api/notebooks/dataset_risco.csv`: Dataset sintético curado para o treinamento do classificador.
+
+---
 
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
-- <b>api</b>: A central de código que abriga a Inteligência Artificial e a Arquitetura do Projeto Separada por módulos (`core`, `infrastructure`, `tests`).
+- <b>api</b>: A central de código que abriga a Inteligência Artificial, a Arquitetura do Projeto (`core`, `infrastructure`, `tests`) e os **notebooks** de experimentação.
+
+- <b>api/notebooks</b>: Laboratório de Ciência de Dados contendo os experimentos de Machine Learning e datasets sintéticos.
 
 - <b>.github</b>: Nesta pasta ficarão os arquivos de configuração específicos do GitHub que ajudam a gerenciar e automatizar processos no repositório.
 
@@ -165,8 +183,10 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 ## 🗃 Histórico de lançamentos
 
 * 0.2.0 - 05/04/2026
-    * 0.2.1 - 05/04/2026
-        * Parte 1 – Frases de sintomas + extração de informações
+    * Parte 1
+        * Frases de sintomas + extração de informações
+    * Parte 2
+        * Implementação do Classificador de Risco
 * 0.1.0 - 10/03/2026
     * Estruturação do projeto
     * Obtenção dos dados
