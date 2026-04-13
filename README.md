@@ -8,6 +8,9 @@
 
 # CardioIA
 
+## Vídeos:
+- Parte 2: https://youtu.be/Mr4dphna-wU
+
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
 
@@ -111,11 +114,63 @@ Estes dados textuais formam o "cérebro interpretativo" da plataforma. Enquanto 
 
 ---
 
+## Parte 4 – Frases de sintomas + extração de informações
 
+Esta fase implementa um "estetoscópio digital" rodando em Inteligência Artificial para Diagnóstico. Criamos um motor de Processamento de Linguagem Natural (NLP) usando **spaCy** e **Scikit-learn** capaz de analisar um texto de um paciente, extrair as informações cruciais (lematização e filtragem sintática de sujeitos/verbos), e correlacionar com uma ontologia de doenças previamente mapeada por vetores matemáticos.
+
+Os artefatos produzidos encontram-se rigorosamente distribuídos em módulos na pasta `api/`:
+* `api/data/`: Diretório contendo os casos de uso das queixas (`relatos.txt`) e a ontologia teórica extraída dos livros médicos (`ontologia.csv`).
+* `api/core/`: Regras de negócio essenciais.
+* `api/infrastructure/`: Adaptadores responsáveis pela predição e leitura robusta.
+* `api/tests/`: Suite de testes.
+* `api/main.py`: O Script Pai que inicializa e orquestra a aplicação.
+
+### Como Executar e Testar
+
+Acesse a subpasta `api`, configure o ambiente virtual suportando o modelo neutro brasileiro (`pt_core_news_sm`):
+
+```bash
+cd api
+python -m venv .venv
+# Ativar venv no Windows:
+.\.venv\Scripts\activate
+# Ativar venv no Linux/Mac:
+source .venv/bin/activate
+
+# Instale as dependências da Machine Learning
+pip install -r requirements.txt
+python -m spacy download pt_core_news_sm
+
+# Rodar Pipeline principal de triagem:
+python main.py
+
+# Validar se todo o framework de abstração resiste:
+pytest tests/ -v
+```
+## Parte 5 – Classificador de Risco (ML)
+
+Esta fase representa a inteligência preditiva do CardioIA voltada para a triagem de urgência. Foi desenvolvido um **Classificador de Texto** que categoriza automaticamente os relatos de sintomas em "Baixo Risco" ou "Alto Risco", permitindo uma priorização baseada em dados clínicos.
+
+### Implementação de Machine Learning
+O modelo utiliza um pipeline de Processamento de Linguagem Natural e Aprendizagem Supervisionada:
+*   **Vetorização:** TF-IDF (*Term Frequency-Inverse Document Frequency*) para transformar sintomas em vetores matemáticos, priorizando palavras-chave clínicas.
+*   **Algoritmo:** **SVM (Support Vector Machine)**, selecionado após testes comparativos com diversos algoritmos por apresentar o melhor **Recall para 'Alto Risco'**.
+*   **Foco em Segurança:** O modelo foi treinado para minimizar falsos negativos, garantindo que pacientes em estado crítico recebam a classificação de urgência correta.
+
+### Ambiente de Experimentação (`notebooks/`)
+Os dados e o laboratório de desenvolvimento estão organizados para garantir a reprodutibilidade:
+*   `api/notebooks/classificador_risco.ipynb`: Notebook com a análise exploratória, treino e comparação de métricas.
+*   `api/notebooks/dataset_risco.csv`: Dataset sintético curado para o treinamento do classificador.
+
+---
 
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
+
+- <b>api</b>: A central de código que abriga a Inteligência Artificial, a Arquitetura do Projeto (`core`, `infrastructure`, `tests`) e os **notebooks** de experimentação.
+
+- <b>api/notebooks</b>: Laboratório de Ciência de Dados contendo os experimentos de Machine Learning e datasets sintéticos.
 
 - <b>.github</b>: Nesta pasta ficarão os arquivos de configuração específicos do GitHub que ajudam a gerenciar e automatizar processos no repositório.
 
@@ -130,6 +185,12 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
+* 0.2.0 - 05/04/2026
+    * Parte 1
+        * Frases de sintomas + extração de informações
+    * Parte 2
+        * Implementação do Classificador de Risco
+    * Vídeo demonstrativo: https://youtu.be/Mr4dphna-wU
 * 0.1.0 - 10/03/2026
     * Estruturação do projeto
     * Obtenção dos dados
