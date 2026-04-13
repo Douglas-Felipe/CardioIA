@@ -5,7 +5,7 @@ from core.use_cases import DiagnosePatientUseCase
 
 
 def main():
-    print("=== Módulo de Diagnóstico Clean Architecture (TF-IDF) ===\n")
+    print("=== Módulo de Diagnóstico (TF-IDF) ===\n")
 
     # Resolve caminhos relativos ao arquivo atual
     base_dir = os.path.dirname(os.path.abspath(__file__))

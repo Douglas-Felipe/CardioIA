@@ -8,6 +8,9 @@
 
 # CardioIA
 
+## Vídeos:
+- Parte 2: https://youtu.be/Mr4dphna-wU
+
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
 
@@ -187,6 +190,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
         * Frases de sintomas + extração de informações
     * Parte 2
         * Implementação do Classificador de Risco
+    * Vídeo demonstrativo: https://youtu.be/Mr4dphna-wU
 * 0.1.0 - 10/03/2026
     * Estruturação do projeto
     * Obtenção dos dados
