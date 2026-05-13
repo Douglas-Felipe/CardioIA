@@ -185,6 +185,9 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
+* 0.3.0 - 12/05/2026
+    * ESP32 com sensores conectado ao broker MQTT
+    * Dashboard com Node-RED
 * 0.2.0 - 05/04/2026
     * Parte 1
         * Frases de sintomas + extração de informações

@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "author": "Douglas de Souza Felipe",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": -9.6,
+      "left": -215.96,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -153.3,
+      "left": -120.6,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 290.1,
+      "left": -191,
+      "rotate": 180,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 56.4,
+      "left": -12.6,
+      "rotate": 90,
+      "attrs": {
+        "color": "red"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 148.25,
+      "left": -68.6,
+      "rotate": 180,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "dht1:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "h-81.3",
+        "h-274.05"
+      ]
+    ],
+    [
+      "dht1:SDA",
+      "esp:15",
+      "green",
+      [
+        "h0.1",
+        "v201.6"
+      ]
+    ],
+    [
+      "pot1:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v-10",
+        "h-74.8",
+        "v-265"
+      ]
+    ],
+    [
+      "pot1:SIG",
+      "esp:34",
+      "orange",
+      [
+        "v-20",
+        "h-66.8",
+        "v-220"
+      ]
+    ],
+    [
+      "pot1:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v-30",
+        "h78",
+        "v-267.6",
+        "h-49.2"
+      ]
+    ],
+    [
+      "led1:A",
+      "r1:1",
+      "red",
+      [
+        "v10"
+      ]
+    ],
+    [
+      "r1:2",
+      "esp:2",
+      "red",
+      [
+        "h20"
+      ]
+    ],
+    [
+      "led1:C",
+      "esp:GND.2",
+      "black",
+      [
+        "v-76.4",
+        "h-105.6"
+      ]
+    ],
+    [
+      "dht1:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v38.4",
+        "h-67.2"
+      ]
+    ]
+  ],
+  "serialMonitor": {
+    "display": "auto",
+    "newline": "lf"
+  },
+  "dependencies": {}
+}
