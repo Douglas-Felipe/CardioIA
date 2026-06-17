@@ -95,16 +95,16 @@ A integração desses textos no CardioIA não é apenas documental; eles servem 
 
 ## Parte 3 – Dados Visuais (VC)
 
-Nesta etapa, o ecossistema CardioIA incorpora o processamento de bioimagens para diagnósticos de precisão. O dataset visual é composto por exames de Eletrocardiograma (ECG) nos formatos `.jpg`, organizados em categorias clínicas (Normal, Infarto do Miocárdio, Histórico de Infarto Posterior e Arritmias).
+Nesta etapa, o ecossistema CardioIA incorpora o processamento de bioimagens de Raio-X de Tórax para diagnósticos de precisão. O dataset visual é composto por exames de Raio-X de Tórax no formato de imagem, organizados e filtrados em categorias clínicas de impacto cardiológico direto (Cardiomegaly e Effusion) e um grupo de controle (No Finding).
 
 ### Estratégia de Armazenamento e Governança
-Em conformidade com as boas práticas de governança de dados e para garantir a performance do versionamento via Git, este repositório armazena apenas uma **amostra representativa** das imagens em `datasets/images`. O volume massivo de dados utilizado para o treinamento exaustivo dos modelos está hospedado em:
-*   **Dataset Completo:** [ECG Image Dataset - Kaggle](https://www.kaggle.com/datasets/evilspirit05/ecg-analysis)
+Para evitar o armazenamento de gigabytes de dados de imagens no versionamento do Git, o dataset completo é baixado dinamicamente no início da execução utilizando a biblioteca `kagglehub`. O volume massivo de dados utilizado para o treinamento está hospedado em:
+*   **Dataset Completo:** [NIH Chest X-rays - Kaggle](https://www.kaggle.com/datasets/nih-chest-xrays/data)
 
 ### Justificativa de IA (Visão Computacional)
-A utilização de algoritmos de Visão Computacional (VC) é fundamental para a interpretação automatizada de traçados eletrocardiográficos. Através de Redes Neurais Convolucionais (CNNs), o sistema é capaz de realizar a **identificação de bordas** e a **segmentação de complexos QRS**, permitindo a detecção precoce de padrões de arritmia e isquemia que podem ser imperceptíveis em uma análise visual rápida.
+A utilização de algoritmos de Visão Computacional (VC) é fundamental para a interpretação automatizada de exames de radiografia de tórax. Através de Redes Neurais Convolucionais (CNNs), o sistema realiza a extração automática de características morfológicas das estruturas torácicas, auxiliando na identificação do tamanho do coração e na presença de fluidos anômalos.
 
-**Classificador de Patologias:** Especificamente, o processamento destas imagens permite treinar um classificador multirrótulo para identificar patologias específicas presentes nos traçados. Ao correlacionar as variações morfológicas das ondas com as classes do dataset (ex: *Myocardial Infarction*), o CardioIA atua como uma ferramenta de suporte à decisão clínica, aumentando a acurácia diagnóstica e reduzindo o tempo de resposta em casos críticos de emergência cardiológica.
+**Classificador de Patologias:** Especificamente, o processamento destas imagens permite treinar classificadores para identificar patologias específicas de interesse do CardioIA: **Cardiomegaly** (hipertrofia cardíaca / coração aumentado) e **Effusion** (derrame pleural, comumente correlacionado a quadros de insuficiência cardíaca). Ao sinalizar as anomalias morfológicas nos exames, o CardioIA atua como uma ferramenta de suporte à decisão clínica, otimizando a triagem hospitalar e agilizando o atendimento.
 
 ---
 
