@@ -177,11 +177,10 @@ Esta etapa consolida o **Assistente Conversacional Inteligente do CardioIA**, in
 * **Interface Web Moderna em React (Vite):** Aplicação Single Page em **React** (`frontend/`) com chips de atalho, balões de chat interativos, indicador de digitação, badge dinâmico de nível de risco, ícones Lucide e suporte a reconexão de sessão.
 
 ### Entregáveis da Fase
-* **Código-fonte do Backend:** Diretório [`api/`](file:///home/dougl/fiap/CardioIA/api/).
-* **Interface do Usuário em React:** Diretório [`frontend/`](file:///home/dougl/fiap/CardioIA/frontend/).
-* **Arquivo de Exportação do Assistente (JSON):** [`api/chatbot/cardioia_watson_assistant.json`](file:///home/dougl/fiap/CardioIA/api/chatbot/cardioia_watson_assistant.json).
-* **Relatório Técnico do Fluxo Conversacional:** [`docs/relatorio_fluxo_conversacional.md`](file:///home/dougl/fiap/CardioIA/docs/relatorio_fluxo_conversacional.md).
-* **Roteiro para Vídeo Demonstrativo:** [`docs/roteiro_video_demonstrativo.md`](file:///home/dougl/fiap/CardioIA/docs/roteiro_video_demonstrativo.md).
+* **Código-fonte do Backend:** Diretório [`api/`](./api/).
+* **Interface do Usuário em React:** Diretório [`frontend/`](./frontend/).
+* **Arquivo de Exportação do Assistente (JSON):** [`api/chatbot/cardioia_watson_assistant.json`](./CardioIA/api/chatbot/cardioia_watson_assistant.json).
+* **Relatório Técnico do Fluxo Conversacional:** [`docs/relatorio_fluxo_conversacional.md`](./CardioIA/docs/relatorio_fluxo_conversacional.md).
 
 ### Como Executar o Assistente Conversacional
 
@@ -247,7 +246,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
-* 0.4.0 - 13/09/2026
+* 0.4.0 - 15/09/2026
     * Fase 5: Assistente Cardiológico Conversacional
     * Modelagem de Intents, Entities e Dialog Tree no IBM Watson Assistant
     * Backend Flask com API REST (`/api/chat`, `/api/health`, `/api/triage`)
