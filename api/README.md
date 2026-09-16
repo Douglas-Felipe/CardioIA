@@ -1,78 +1,89 @@
-# Módulo de Diagnóstico
+# CardioIA - API & Módulo Conversacional (Fase 5)
 
-## 🏗 Estrutura e Interações
+## 🏗 Estrutura e Arquitetura
 
-O agrupamento de arquivos é separado em responsabilidades práticas para facilitar o fluxo de dados da aplicação. 
+A pasta `api/` abriga o ecossistema de inteligência do CardioIA, organizado em arquitetura limpa e modular:
 
-O script de entrada (`main.py`) inicia montando os componentes de infraestrutura (leitura em disco e motor de texto) e os fornece para as rotinas avaliadoras.
-
-O diagrama exibe como esses blocos conversam durante a execução:
+1. **`chatbot/`**: Módulo conversacional baseado no **IBM Watson Assistant** (`cardioia_watson_assistant.json`), cliente de integração (`watson_client.py`) e motor local resiliente de inferência (`local_assistant_engine.py`).
+2. **`core/`**: Entidades clínicas (`entities.py`), contratos/portas (`ports.py`) e casos de uso de diagnóstico (`use_cases.py`).
+3. **`infrastructure/`**: Adaptador de NLP com spaCy + scikit-learn (`nlp_service.py`) e repositórios de dados (`repositories.py`).
+4. **`templates/` & `static/`**: Interface Web moderna do Chatbot (HTML5, CSS3, JavaScript com design cardiológico e badge dinâmico de risco).
+5. **`app.py`**: Servidor Web Flask expondo as rotas da interface e a API REST.
+6. **`main.py`**: Pipeline batch de triagem por TF-IDF.
 
 ```mermaid
 graph TD
     classDef infra fill:#f5d042,stroke:#333,stroke-width:2px,color:#000;
     classDef core fill:#55a868,stroke:#333,stroke-width:2px,color:#fff;
-    classDef main fill:#b0dcd5,stroke:#333,stroke-width:2px,color:#000;
+    classDef chat fill:#38bdf8,stroke:#333,stroke-width:2px,color:#000;
+    classDef web fill:#b0dcd5,stroke:#333,stroke-width:2px,color:#000;
 
-    Main["main.py<br>(Início)"]:::main
+    Web["Interface Web / Templates<br>(index.html, JS, CSS)"]:::web
+    App["app.py<br>(Flask REST API)"]:::web
     
+    subgraph Conversacional ["Assistente Conversacional (Fase 5)"]
+        WatsonClient["watson_client.py<br>(IBM Watson SDK)"]:::chat
+        LocalEngine["local_assistant_engine.py<br>(Inferência Resiliente)"]:::chat
+        Skill["cardioia_watson_assistant.json<br>(Intents, Entities, Dialog)"]:::chat
+    end
+
+    subgraph Core ["Motor Lógico de Diagnóstico"]
+        UseCase("DiagnosePatientUseCase"):::core
+        Ports{"Ports (Contratos)"}:::core
+        Entities(("Entidades")):::core
+    end
+
     subgraph Infrastructure ["Serviços Externos"]
-        Repo["repositories.py<br>(Lê CSV e TXT)"]:::infra
-        NLP["nlp_service.py<br>(Machine Learning c/ spaCy)"]:::infra
+        Repo["repositories.py"]:::infra
+        NLP["nlp_service.py"]:::infra
     end
 
-    subgraph Core ["Motor Logico de Diagnóstico"]
-        UseCase("DiagnosePatientUseCase<br>(Recebe dados e processa Similaridade)"):::core
-        Ports{"Contratos (Interfaces de Comunicação)"}:::core
-        Entities(("Entidades de Dados<br>(Disease, PatientReport)")):::core
-    end
-
-    Main -. Passa acessos da lib ..-> UseCase
-    Repo -. Entrega dados processados a .-> Ports
-    NLP -. Libera Funções matemáticas .-> Ports
+    Web <--> App
+    App --> WatsonClient
+    WatsonClient -. Fallback .-> LocalEngine
+    Skill -. Definições .-> LocalEngine
+    App -. Triagem Clínica .-> UseCase
     UseCase --> Ports
     UseCase --> Entities
+    Repo -.-> Ports
+    NLP -.-> Ports
 ```
 
 ---
 
-## 🗄 Os Dados
+## 🌐 Endpoints da API Flask (`app.py`)
 
-Nossos arquivos textuais ficam em `api/data/`. Eles funcionam simulando diretrizes médicas teóricas e o testemunho prático do paciente:
-* **`ontologia.csv`**: Esta tabela correlaciona os nomes exatos das patologias e um bloco extenso de palavras-chaves/sintomas que caracterizam essas doenças. Ele funciona como a matriz base por trás da inteligência do bot.
-* **`relatos.txt`**: Conjunto de frases brutas, escritas na voz do paciente. Este é efetivamente as entradas (Inputs) processadas que o script lê para rodar sua avaliação.
-
----
-
-## 🧠 NLP: Estratégia do Pipeline
-
-O motor do código tenta avaliar quantitativamente o qual perto o modelo vetorial do paciente está do referencial dos seus dados do banco (o .csv). O passo a passo dele na inferência real opera assim:
-
-1. **Tagging (Filtragem):** A rede spaCy lê a frase descritiva completa do paciente e elimina silenciosamente palavras não determinantes. Apenas Substantivos, Adjetivos, Nomes e Verbos são preservados no pipeline.
-2. **Lematização**: O `nlp_service.py` reduz esses termos para o formato mais primitivo do dicionário. (Ex: transforma "doeu muito e minha visão ficou cega" para "doer muito e visão ficar cego"). Isso padroniza todos os textos para os eixos cruzarem perfeitamente no Scikit-learn.
-3. **Métrica Multidimensional**: Transformados em índices matemáticos sob um vetor usando a matriz `TfidfVectorizer`, o programa captura as frases do paciente que tenham o valor numérico sobreposto ao modelo da doença teórica (Calculado por *`Cosine Similarity`*).
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| `GET` | `/` | Renderiza a interface web interativa do chatbot. |
+| `POST` | `/api/chat` | Envia mensagem do usuário e recebe resposta contextualizada, intents, entidades e nível de risco. |
+| `POST` | `/api/session` | Cria uma nova sessão conversacional única. |
+| `GET` | `/api/health` | Verifica status de saúde do backend e da conexão com o IBM Watson. |
+| `POST` | `/api/triage` | Triagem combinada (Chatbot + Ontologia de doenças por TF-IDF). |
 
 ---
 
-## 🚀 Como Rodar Localmente
-
-Certifique-se de estar dentro do diretório (`api/`) e siga o script:
+## 🚀 Como Executar Localmente
 
 ```bash
-# 1. Crie e ative o seu ambiente virtual
-# No Windows:
-python -m venv .venv
-.\.venv\Scripts\activate
-
+# 1. Ative o ambiente virtual
 # No Linux / Mac:
-python3 -m venv .venv
-source .venv/bin/activate
+source ../.venv/bin/activate
+# No Windows:
+..\.venv\Scripts\activate
 
-# 2. Instale as bibliotecas e faça download do modelo PT-BR da língua
+# 2. Instale as dependências
 pip install -r requirements.txt
 python -m spacy download pt_core_news_sm
 
-# 3. Execute a rotina final
+# 3. (Opcional) Configure as credenciais do Watson em .env
+cp .env.example .env
+
+# 4. Iniciar o Servidor Web do Chatbot:
+python app.py
+# Acesse no navegador: http://localhost:5000
+
+# 5. Para rodar a rotina batch de diagnóstico (Fase 4):
 python main.py
 ```
 
@@ -80,9 +91,8 @@ python main.py
 
 ## 🧪 Como Testar
 
-Os testes avaliam a carga total das dependências. Neles, averiguamos rapidamente se os relatórios em `.txt` geram o Diagnóstico final adequado mesmo burlando o peso analítico real das libs, usando simulações (Mocks) para atestar que os fluxos semióticos não quebrarão na lógica de negócios local.
+Execute a suíte completa de testes unitários e de integração com o `pytest`:
 
 ```bash
-# Você só precisa executar:
 pytest tests/ -v
 ```

@@ -1,0 +1,398 @@
+{
+  "name": "CardioIA - Assistente Cardiológico Conversacional",
+  "language": "pt-br",
+  "description": "Skill de diálogo para o assistente conversacional CardioIA (Fase 5), voltado à triagem cardiológica, análise de queixas, sinais vitais e educação em saúde cardiovascular.",
+  "intents": [
+    {
+      "intent": "saudacao",
+      "examples": [
+        {"text": "olá"},
+        {"text": "oi assistente"},
+        {"text": "bom dia"},
+        {"text": "boa tarde"},
+        {"text": "boa noite"},
+        {"text": "olá, gostaria de atendimento"},
+        {"text": "iniciar conversa"},
+        {"text": "oi, tudo bem?"},
+        {"text": "opa, preciso de ajuda com minha saúde"}
+      ],
+      "description": "Cumprimentos e início de interação do usuário"
+    },
+    {
+      "intent": "despedida",
+      "examples": [
+        {"text": "tchau"},
+        {"text": "até logo"},
+        {"text": "muito obrigado pela ajuda"},
+        {"text": "obrigado, até mais"},
+        {"text": "valeu pelo atendimento"},
+        {"text": "encerrar conversa"},
+        {"text": "finalizar atendimento"}
+      ],
+      "description": "Finalização da sessão conversacional"
+    },
+    {
+      "intent": "informar_sintomas",
+      "examples": [
+        {"text": "estou sentindo dor no peito"},
+        {"text": "estou com aperto no peito e desconforto"},
+        {"text": "sinto palpitações e coração acelerado"},
+        {"text": "estou com falta de ar ao subir escadas"},
+        {"text": "minhas pernas estão inchadas no fim do dia"},
+        {"text": "sinto tonturas e cansaço excessivo"},
+        {"text": "meu coração parece bater fora do ritmo"},
+        {"text": "estou sentindo queimação no peito"},
+        {"text": "dor no peito quando respiro fundo"}
+      ],
+      "description": "Relato de sintomas e queixas clínicas pelo usuário"
+    },
+    {
+      "intent": "emergencia_cardiaca",
+      "examples": [
+        {"text": "socorro, acho que estou tendo um infarto"},
+        {"text": "dor muito forte no peito irradiando para o braço esquerdo"},
+        {"text": "dor intensa no peito, suor frio e náusea"},
+        {"text": "dor no peito que vai para o pescoço e mandíbula"},
+        {"text": "pressão insuportável no peito com falta de ar aguda"},
+        {"text": "desmaiei e meu peito dói muito"},
+        {"text": "preciso do samu com urgência"}
+      ],
+      "description": "Sinais de alarme e emergência cardiovascular crítica"
+    },
+    {
+      "intent": "informar_dados_vitais",
+      "examples": [
+        {"text": "minha pressão arterial deu 14 por 9"},
+        {"text": "medi minha pressão e deu 160 por 100"},
+        {"text": "minha frequência cardíaca está em 115 bpm"},
+        {"text": "meus batimentos deram 45 bpm em repouso"},
+        {"text": "pressão 12 por 8"},
+        {"text": "minha glicose deu 140 mg/dl"},
+        {"text": "minha pressão está 130 por 85"}
+      ],
+      "description": "Envio de medidas como pressão arterial, frequência cardíaca e glicemia"
+    },
+    {
+      "intent": "duvidas_prevencao",
+      "examples": [
+        {"text": "como posso prevenir infarto e doenças do coração?"},
+        {"text": "o que fazer para controlar a pressão alta?"},
+        {"text": "quais alimentos são bons para o coração?"},
+        {"text": "quais são os principais fatores de risco cardiovascular?"},
+        {"text": "como diminuir o colesterol naturalmente?"},
+        {"text": "qual a rotina ideal de exercícios para quem é hipertenso?"}
+      ],
+      "description": "Orientações sobre hábitos de vida saudáveis e prevenção"
+    },
+    {
+      "intent": "sobre_cardioia",
+      "examples": [
+        {"text": "o que é o cardioia?"},
+        {"text": "quem é você?"},
+        {"text": "como funciona este assistente?"},
+        {"text": "qual a função deste chatbot?"},
+        {"text": "me fale sobre o projeto cardioia"}
+      ],
+      "description": "Informações institucionais sobre o sistema CardioIA"
+    },
+    {
+      "intent": "ajuda",
+      "examples": [
+        {"text": "ajuda"},
+        {"text": "quais opções você tem?"},
+        {"text": "o que você pode fazer?"},
+        {"text": "menu de ajuda"},
+        {"text": "como usar o assistente?"}
+      ],
+      "description": "Solicitação de instruções e menu de funcionalidades"
+    }
+  ],
+  "entities": [
+    {
+      "entity": "sintoma",
+      "values": [
+        {
+          "value": "dor_no_peito",
+          "synonyms": [
+            "dor torácica",
+            "aperto no peito",
+            "pontada no coração",
+            "pressão no peito",
+            "desconforto torácico",
+            "dor precordial",
+            "queimação no peito"
+          ]
+        },
+        {
+          "value": "falta_de_ar",
+          "synonyms": [
+            "dispneia",
+            "cansaço ao respirar",
+            "dificuldade respiratória",
+            "fôlego curto",
+            "sufocamento"
+          ]
+        },
+        {
+          "value": "palpitacao",
+          "synonyms": [
+            "taquicardia",
+            "coração disparado",
+            "batedeira",
+            "arritmia",
+            "batimento acelerado",
+            "palpitações"
+          ]
+        },
+        {
+          "value": "tontura",
+          "synonyms": [
+            "vertigem",
+            "zonzeira",
+            "sensação de desmaio",
+            "escurecimento da vista",
+            "síncope"
+          ]
+        },
+        {
+          "value": "inchaco",
+          "synonyms": [
+            "edema",
+            "pernas inchadas",
+            "pés inchados",
+            "tornozelos inchados",
+            "retenção de líquido"
+          ]
+        },
+        {
+          "value": "dor_irradiada",
+          "synonyms": [
+            "dor no braço esquerdo",
+            "dor no braço",
+            "dor na mandíbula",
+            "dor nas costas",
+            "dor no queixo",
+            "dormência no braço"
+          ]
+        }
+      ],
+      "description": "Entidades que representam sintomas clínicos cardiológicos"
+    },
+    {
+      "entity": "sinal_vital",
+      "values": [
+        {
+          "value": "pressao_arterial",
+          "synonyms": [
+            "pressão",
+            "pa",
+            "pressão sistólica",
+            "pressão diastólica",
+            "tensão arterial"
+          ]
+        },
+        {
+          "value": "frequencia_cardiaca",
+          "synonyms": [
+            "batimentos",
+            "bpm",
+            "pulsação",
+            "frequência do coração",
+            "pulso"
+          ]
+        },
+        {
+          "value": "glicemia",
+          "synonyms": [
+            "glicose",
+            "açúcar no sangue",
+            "taxa de glicose"
+          ]
+        }
+      ],
+      "description": "Entidades de medições de parâmetros fisiológicos"
+    },
+    {
+      "entity": "fator_risco",
+      "values": [
+        {
+          "value": "hipertensao",
+          "synonyms": ["pressão alta", "hipertenso", "hipertensão arterial"]
+        },
+        {
+          "value": "diabetes",
+          "synonyms": ["diabético", "glicemia alta", "diabetes mellitus"]
+        },
+        {
+          "value": "tabagismo",
+          "synonyms": ["fumante", "fumo", "cigarro", "tabaco"]
+        },
+        {
+          "value": "colesterol_alto",
+          "synonyms": ["colesterol", "hipercolesterolemia", "ldl alto", "gordura no sangue"]
+        },
+        {
+          "value": "sedentarismo",
+          "synonyms": ["sedentário", "sem atividade física", "não faz exercício"]
+        }
+      ],
+      "description": "Fatores predisponentes de risco cardiovascular"
+    }
+  ],
+  "dialog_nodes": [
+    {
+      "dialog_node": "node_welcome",
+      "title": "Boas-vindas",
+      "conditions": "welcome",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Olá! Sou o **Assistente Cardiológico CardioIA** 🫀.\n\nEstou aqui para realizar uma triagem inicial dos seus sintomas, esclarecer dúvidas sobre saúde do coração e oferecer orientações preventivas com base em diretrizes médicas.\n\n⚠️ *Nota de Segurança: Este assistente é um protótipo acadêmico para apoio e educação em saúde, não substituindo uma consulta com profissional médico.*\n\nComo posso ajudar você hoje? (Você pode descrever sintomas, informar sua pressão arterial ou pedir dicas de prevenção)"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_emergencia",
+      "title": "Alerta de Emergência Médica",
+      "conditions": "#emergencia_cardiaca || (@sintoma:dor_no_peito && @sintoma:dor_irradiada)",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "🚨 **ALERTA DE EMERGÊNCIA MÉDICA (ALTO RISCO)** 🚨\n\nIdentificamos sinais de alarme compatíveis com síndrome coronariana aguda ou outra urgência cardiovascular grave.\n\n**RECOMENDAÇÕES IMEDIATAS:**\n1. Ligue imediatamente para o **SAMU (192)** ou **Bombeiros (193)**.\n2. Se não houver resgate imediato, dirija-se com auxílio ao **Pronto-Socorro Cardiológico** mais próximo.\n3. Permaneça em repouso absoluto, preferencialmente sentado ou recostado.\n4. Não dirija e evite esforços físicos adicionais."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_informar_sintomas",
+      "title": "Triagem de Sintomas Clínicos",
+      "conditions": "#informar_sintomas",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Compreendi o relato dos seus sintomas. Para uma melhor triagem cardiológica:\n\n• Esses sintomas surgiram repentinamente ou já ocorrem há alguns dias?\n• Você sente irradiação para o braço, mandíbula ou costas?\n• Há presença de falta de ar, suor frio ou tontura associada?\n\n*Caso a intensidade seja forte ou haja piora progressiva, recomendamos buscar atendimento médico presencial para realização de eletrocardiograma (ECG) e enzimas cardíacas.*"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_dados_vitais",
+      "title": "Interpretação de Sinais Vitais",
+      "conditions": "#informar_dados_vitais",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Recebi as informações sobre seus parâmetros vitais. Segundo as Diretrizes Brasileiras de Hipertensão:\n\n• **Pressão Normal:** Sistólica < 120 mmHg e Diastólica < 80 mmHg (12 por 8).\n• **Pré-hipertensão:** 121-139 / 81-89 mmHg.\n• **Hipertensão:** ≥ 140/90 mmHg (14 por 9 ou mais).\n• **Frequência Cardíaca de Repouso Normal:** 60 a 100 bpm.\n\n*Se a pressão estiver acima de 180/110 mmHg ou acompanhada de sintomas, procure atendimento médico imediato.*"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_prevencao",
+      "title": "Orientações Preventivas e Hábitos",
+      "conditions": "#duvidas_prevencao",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "A prevenção cardiovascular é baseada no controle dos fatores de risco. As principais recomendações incluem:\n\n1. **Alimentação Cardioprotetora:** Reduzir o consumo de sal/sódio (< 2g/dia), ultraprocessados e gorduras saturadas; priorizar frutas, vegetais e grãos integrais.\n2. **Atividade Física Regular:** Pelo menos 150 minutos semanais de atividade aeróbica moderada.\n3. **Cessação do Tabagismo:** O fumo é um dos maiores fatores causais de infarto e aterosclerose.\n4. **Monitoramento Periódico:** Acompanhar níveis de pressão arterial, glicemia e colesterol (LDL).\n5. **Manejo do Estresse e Sono:** Manter rotina saudável de repouso."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_sobre",
+      "title": "Sobre o Projeto CardioIA",
+      "conditions": "#sobre_cardioia",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "O **CardioIA** é um ecossistema inteligente de apoio à saúde cardiovascular desenvolvido para integrar:\n\n• **IoT & Dados Numéricos:** Monitoramento contínuo de biomarcadores.\n• **Visão Computacional:** Auxílio diagnóstico em exames de Raio-X torácico (identificação de Cardiomegalia e Derrame Pleural).\n• **Processamento de Linguagem Natural (NLP):** Análise semântica de queixas e classificação de risco clínico.\n• **Assistente Conversacional (Fase 5):** Interface amigável para triagem, educação em saúde e encaminhamento ágil."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_ajuda",
+      "title": "Menu de Ajuda e Comandos",
+      "conditions": "#ajuda",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Você pode interagir comigo das seguintes formas:\n\n1. **Relatar sintomas:** Digite o que está sentindo (ex: *'estou sentindo dor no peito e cansaço'*).\n2. **Emergências:** Digite *'socorro'* ou descreva sinais graves para receber orientação de urgência.\n3. **Informar sinais vitais:** Digite *'minha pressão deu 14 por 9'* ou *'meu pulso deu 95 bpm'*.\n4. **Dúvidas de prevenção:** Pergunte sobre alimentação, exercícios e controle da pressão.\n5. **Sobre o CardioIA:** Pergunte *'o que é o CardioIA?'* para conhecer nosso sistema."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_despedida",
+      "title": "Encerramento e Despedida",
+      "conditions": "#despedida",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Agradeço pelo contato com o **CardioIA**! Cuide bem do seu coração e lembre-se de realizar consultas de rotina. Caso precise de mais informações, estou sempre à disposição. Tenha um excelente dia! 🫀"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "dialog_node": "node_fallback",
+      "title": "Tratamento de Exceção (Fallback)",
+      "conditions": "anything_else",
+      "output": {
+        "generic": [
+          {
+            "response_type": "text",
+            "values": [
+              {
+                "text": "Desculpe, não compreendi totalmente a sua mensagem. Como assistente focado em saúde cardiológica, você pode me informar sobre:\n\n• Sintomas que você está sentindo (dor no peito, palpitação, falta de ar);\n• Medidas de pressão arterial ou batimentos;\n• Dicas de prevenção cardiovascular;\n• Ou digitar **ajuda** para ver os tópicos disponíveis."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "learning_opt_out": true
+}
