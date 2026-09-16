@@ -164,11 +164,72 @@ Os dados e o laboratório de desenvolvimento estão organizados para garantir a 
 
 ---
 
+---
+
+## Parte 6 (Fase 5) – Assistente Cardiológico Conversacional (Chatbot com Watson Assistant & Flask)
+
+Esta etapa consolida o **Assistente Conversacional Inteligente do CardioIA**, integrando os conceitos de Processamento de Linguagem Natural, Chatbots & Agentes Virtuais (PCV).
+
+### Funcionalidades do Assistente
+* **Modelagem NLU no IBM Watson Assistant:** Definição completa de Intenções (`#saudacao`, `#informar_sintomas`, `#emergencia_cardiaca`, `#informar_dados_vitais`, `#duvidas_prevencao`, `#sobre_cardioia`, `#ajuda`, `#despedida`) e Entidades clínicas (`@sintoma`, `@sinal_vital`, `@fator_risco`).
+* **Triagem de Urgência & Ética Médica:** Detecção automática de sintomas de alarme cardiovascular (ex: dor no peito irradiada para o membro superior ou síncope) com acionamento imediato de alerta e recomendação de contato com o **SAMU (192)**.
+* **Backend Flask Resiliente:** Servidor Python (`api/app.py`) compatível com a API do IBM Watson Cloud e dotado de motor local de inferência para operação offline imediata.
+* **Interface Web Moderna em React (Vite):** Aplicação Single Page em **React** (`frontend/`) com chips de atalho, balões de chat interativos, indicador de digitação, badge dinâmico de nível de risco, ícones Lucide e suporte a reconexão de sessão.
+
+### Entregáveis da Fase
+* **Código-fonte do Backend:** Diretório [`api/`](./api/).
+* **Interface do Usuário em React:** Diretório [`frontend/`](./frontend/).
+* **Arquivo de Exportação do Assistente (JSON):** [`api/chatbot/cardioia_watson_assistant.json`](./CardioIA/api/chatbot/cardioia_watson_assistant.json).
+* **Relatório Técnico do Fluxo Conversacional:** [`docs/relatorio_fluxo_conversacional.md`](./CardioIA/docs/relatorio_fluxo_conversacional.md).
+
+### Como Executar o Assistente Conversacional
+
+#### 1. Backend Flask:
+```bash
+# Acesse o diretório da API
+cd api
+
+# Ative o ambiente virtual
+# Linux/Mac:
+source ../.venv/bin/activate
+# Windows:
+..\.venv\Scripts\activate
+
+# Instale as dependências
+pip install -r requirements.txt
+
+# (Opcional) Configure suas credenciais IBM Watson em .env:
+cp .env.example .env
+
+# Inicie o servidor backend
+python app.py
+```
+
+#### 2. Frontend React:
+```bash
+# Em outro terminal, acesse a pasta frontend:
+cd frontend
+
+# Instale os pacotes npm
+npm install
+
+# Inicie o servidor de desenvolvimento
+npm run dev
+
+# Acesse no navegador: http://localhost:3000
+```
+
+---
+
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
-- <b>api</b>: A central de código que abriga a Inteligência Artificial, a Arquitetura do Projeto (`core`, `infrastructure`, `tests`) e os **notebooks** de experimentação.
+- <b>api</b>: A central de código que abriga o backend Flask (`app.py`), o módulo conversacional Watson (`chatbot/`), a camada de NLP (`core`, `infrastructure`, `tests`).
+
+- <b>frontend</b>: Interface de Usuário completa desenvolvida em **React (Vite)** com componentes conversacionais, chips de atalho e design cardiológico responsivo.
+
+- <b>api/chatbot</b>: Modelagem da Skill em JSON (`cardioia_watson_assistant.json`), cliente de conexão da API Watson e motor local de contingência.
 
 - <b>api/notebooks</b>: Laboratório de Ciência de Dados contendo os experimentos de Machine Learning e datasets sintéticos.
 
@@ -176,15 +237,21 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 - <b>assets</b>: aqui estão os arquivos relacionados a elementos não-estruturados deste repositório, como imagens.
 
-- <b>docs</b>: Artigos, citações, documentos e livros relacioados ao projeto que serão usados para treinamento e refinamento de algoritmos de ML e IA.
+- <b>docs</b>: Artigos, relatórios técnicos (`relatorio_fluxo_conversacional.md`), roteiros e diretrizes de saúde.
 
 - <b>datasets</b>: aqui estão os arquivos relacionados a dados do projeto.
 
-- <b>README.md</b>: arquivo que serve como guia e explicação geral sobre o projeto (o mesmo que você está lendo agora).
+- <b>README.md</b>: arquivo que serve como guia e explicação geral sobre o projeto.
 
 
 ## 🗃 Histórico de lançamentos
 
+* 0.4.0 - 15/09/2026
+    * Fase 5: Assistente Cardiológico Conversacional
+    * Modelagem de Intents, Entities e Dialog Tree no IBM Watson Assistant
+    * Backend Flask com API REST (`/api/chat`, `/api/health`, `/api/triage`)
+    * Interface Web Responsiva com triagem dinâmica de risco e atalhos rápidos
+    * Relatório técnico e roteiro de vídeo de demonstração
 * 0.3.0 - 12/05/2026
     * ESP32 com sensores conectado ao broker MQTT
     * Dashboard com Node-RED

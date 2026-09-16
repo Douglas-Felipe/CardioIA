@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioIA - Assistente Cardiológico Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Header -->
+        <header class="app-header">
+            <div class="brand-container">
+                <div class="avatar-wrapper">
+                    <img src="{{ url_for('static', filename='images/cardioia-avatar.svg') }}" alt="CardioIA Logo" class="brand-avatar">
+                    <span class="status-indicator online" title="Assistente Online"></span>
+                </div>
+                <div class="brand-info">
+                    <h1 class="brand-title">CardioIA Assistant</h1>
+                    <p class="brand-subtitle">Triagem & Orientação Cardiovascular</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span id="risk-badge" class="risk-badge badge-baixo">Risco: Baixo</span>
+                <button id="btn-reset-chat" class="btn-icon" title="Reiniciar Atendimento">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                    <span>Limpar</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main class="chat-viewport">
+            <div id="messages-container" class="messages-container">
+                <!-- Welcome Message Bubble -->
+                <div class="message-wrapper assistant">
+                    <div class="message-avatar">
+                        <img src="{{ url_for('static', filename='images/cardioia-avatar.svg') }}" alt="Bot">
+                    </div>
+                    <div class="message-bubble">
+                        <div class="message-header">
+                            <span class="sender-name">CardioIA</span>
+                            <span class="message-time">Agora</span>
+                        </div>
+                        <div class="message-text">
+                            Olá! Sou o <strong>Assistente Cardiológico CardioIA</strong> 🫀.<br><br>
+                            Estou preparado para auxiliar na triagem inicial de sintomas, interpretar dados de pressão arterial e tirar dúvidas sobre saúde do coração com base em diretrizes clínicas.<br><br>
+                            <em>Como posso ajudar você hoje?</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Chips -->
+            <div class="quick-chips-container" id="quick-chips">
+                <button class="chip" data-msg="Estou sentindo forte dor no peito e suor frio">🚨 Dor no Peito / Urgência</button>
+                <button class="chip" data-msg="Gostaria de relatar sintomas que estou sentindo">🩺 Relatar Sintomas</button>
+                <button class="chip" data-msg="Minha pressão arterial deu 14 por 9 e batimento 85">📊 Informar Pressão</button>
+                <button class="chip" data-msg="Como posso prevenir doenças do coração?">💡 Dicas de Prevenção</button>
+                <button class="chip" data-msg="O que é o projeto CardioIA?">ℹ️ Sobre o CardioIA</button>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="typing-indicator hidden">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <span>CardioIA está processando...</span>
+            </div>
+        </main>
+
+        <!-- Input Box -->
+        <footer class="chat-footer">
+            <form id="chat-form" class="input-form">
+                <textarea 
+                    id="user-input" 
+                    placeholder="Digite sua mensagem, sintoma ou dúvida sobre saúde..." 
+                    rows="1" 
+                    required 
+                    autocomplete="off"
+                ></textarea>
+                <button type="submit" id="btn-send" class="btn-send" title="Enviar Mensagem">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+            <div class="disclaimer-bar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span><strong>Aviso de Saúde:</strong> Protótipo acadêmico para triagem e orientação educacional. Em situações de emergência, ligue <strong>192 (SAMU)</strong>.</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
