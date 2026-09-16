@@ -9,7 +9,7 @@
 # CardioIA
 
 ## Vídeos:
-- Parte 2: https://youtu.be/Mr4dphna-wU
+- Fase 5: [https://youtu.be/Mr4dphna-wU](https://youtu.be/mb6T__vdnBE)
 
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
