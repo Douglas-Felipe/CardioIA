@@ -1,0 +1,29 @@
+# Render Blueprint - CardioIA Backend Integrador (Fase 7)
+# Render > New > Blueprint > selecione este repositório. Cada push na branch main gera novo deploy.
+services:
+  - type: web
+    name: cardioia-backend
+    runtime: python
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r backend/requirements.txt && python backend/bootstrap_model.py
+    startCommand: uvicorn cardioia.main:app --host 0.0.0.0 --port $PORT --app-dir backend
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEVICE_TOKEN
+        value: cardioia-device-demo-token
+      - key: MEDICO_PASSWORD
+        value: cardio123
+      - key: PACIENTE_PASSWORD
+        value: cardio123
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

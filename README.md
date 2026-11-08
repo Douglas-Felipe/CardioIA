@@ -9,7 +9,9 @@
 # CardioIA
 
 ## Vídeos:
-- Fase 5: [https://youtu.be/Mr4dphna-wU](https://youtu.be/mb6T__vdnBE)
+- **Fase 7 (MVP Final Integrado):** `[COLE_AQUI_O_LINK_DO_YOUTUBE_DA_FASE_7]`
+- Fase 6 (Sistema Multiagente): [https://youtu.be/mDPamQwldME](https://youtu.be/mDPamQwldME)
+- Fase 5 (Assistente Conversacional): [https://youtu.be/mb6T__vdnBE](https://youtu.be/mb6T__vdnBE)
 
 ## 👨‍🎓 Integrantes: 
 - <a href="https://www.linkedin.com/in/douglas-souza-felipe-b815281a2/">Douglas de Souza Felipe</a>
@@ -19,6 +21,148 @@
 - Caique Nonato
 ### Coordenador(a)
 - André Godoi Chiovato
+
+---
+
+## 🚀 Fase 7 — Plataforma de Inteligência Cardíaca Total (MVP Final)
+
+A Fase 7 integra todos os módulos construídos ao longo do projeto em uma arquitetura unificada em Python, conectando o hardware simulado em **MicroPython (Wokwi)** ao **Backend Integrador (FastAPI no Render)**, aos motores de **Machine Learning + Sistema Multiagente (Fase 6)** e **Assistente Conversacional (Fase 5)**, entregando os insights em tempo real na aplicação **Web (React + Vite na Vercel)** e no aplicativo **Mobile (React Native + Expo EAS Build `.apk`)**.
+
+### 🔗 Links Oficiais de Entrega (Fase 7)
+
+| Entregável | Link / Localização |
+| :--- | :--- |
+| **🌐 Aplicação Web (Vercel — CI/CD ativo)** | `https://cardioia.vercel.app` *(substitua pela URL final da Vercel após o deploy)* |
+| **⚙️ Backend Integrador Python (Render)** | `https://cardioia-backend.onrender.com` *(substitua pela URL final do Render)* |
+| **📱 Build Mobile `.apk` (Expo EAS Dashboard)** | `[COLE_AQUI_O_LINK_DO_BUILD_NO_EXPO_DASHBOARD]` |
+| **🔌 Simulação Hardware MicroPython (Wokwi)** | `[COLE_AQUI_O_LINK_PUBLICO_DO_PROJETO_WOKWI]` |
+| **📄 Relatório Técnico (≤ 5 páginas)** | [`docs/relatorio_tecnico_fase7.md`](docs/relatorio_tecnico_fase7.md) |
+| **🎬 Roteiro do Vídeo & Guia de Deploy** | [`docs/roteiro_video_fase7.md`](docs/roteiro_video_fase7.md) |
+
+> **Credenciais de demonstração (Web e Mobile):**
+> - **Perfil Médico:** usuário `medico` · senha `cardio123` *(dashboard completo, probabilidade ML, protocolos clínicos, trilha multiagente e simulador)*
+> - **Perfil Paciente:** usuário `paciente` · senha `cardio123` *(visão simplificada em linguagem acessível + chat integrado)*
+
+### 🏗️ Arquitetura Final (`Sensor → MicroPython → Backend Python → APIs de IA → UI`)
+
+```mermaid
+flowchart LR
+    subgraph Wokwi["Hardware Edge — Wokwi (iot/micropython)"]
+        S["Sensores:\nDHT22 (Temp) + 3 Potenciômetros\n(FC, SpO₂, PA Sistólica)"]
+        MP["ESP32 MicroPython (main.py)\nClassificação Local + Buffer Offline\nOLED SSD1306 + LEDs + Buzzer"]
+        S --> MP
+    end
+
+    subgraph Cloud["Núcleo Integrador Python — Render (backend/)"]
+        API["FastAPI (cardioia/main.py)\nAuth JWT + REST + Store"]
+        F6["Fase 6: MultiAgentPipelineRunner\nOrquestrador → Analista ML (RandomForest)\n→ Especialista Protocolos → Planejador"]
+        F5["Fase 5: WatsonAssistantClient\nIBM Watson + Motor Local Resiliente"]
+        LLM["LLM Opcional (Gemini / OpenAI)\nSíntese Clínica em Linguagem Natural"]
+        API <--> F6
+        API <--> F5
+        F6 -.-> LLM
+    end
+
+    subgraph Front["Interfaces do Usuário (UI)"]
+        WEB["Web SPA (React + Vite)\nDeploy Vercel + vercel.json"]
+        MOB["App Mobile (React Native + Expo)\nEAS Build .apk (br.com.fiap.cardioia)"]
+    end
+
+    MP -- "HTTP POST /api/telemetry\n(X-Device-Token)" --> API
+    API -- "JSON: nível + risco ML" --> MP
+    WEB <-- "REST + Bearer JWT (polling 3s)" --> API
+    MOB <-- "REST + Bearer JWT (polling 3s)" --> API
+```
+
+### 📂 Estrutura dos Arquivos Obrigatórios da Fase 7
+
+```text
+CardioIA/
+├── vercel.json                     # Configuração de build e rewrite SPA na raiz
+├── render.yaml                     # Blueprint de deploy automático do Backend Python no Render
+├── backend/                        # Núcleo Integrador em Python (FastAPI)
+│   ├── cardioia/
+│   │   ├── main.py                 # Endpoints (/api/auth/login, /api/telemetry, /api/dashboard, /api/chat...)
+│   │   ├── ai_engine.py            # Integração com ML + Multiagente (Fase 6) e LLM opcional
+│   │   ├── chat_service.py         # Integração com Chatbot Watson/Local (Fase 5) + contexto de vitais
+│   │   ├── vitals_rules.py         # Regras clínicas determinísticas compartilhadas com a borda
+│   │   ├── auth.py                 # Autenticação JWT (perfis médico e paciente) + token do dispositivo
+│   │   └── store.py                # Buffer thread-safe de leituras e histórico de alertas
+│   ├── bootstrap_model.py          # Treina o pipeline ML da Fase 6 automaticamente no build
+│   ├── requirements.txt
+│   └── tests/test_api.py           # Testes automatizados fim-a-fim da API integradora
+├── iot/
+│   ├── src/main.cpp                # Firmware original C/C++ (Fase 3 - preservado)
+│   └── micropython/                # Transição para MicroPython (Fase 7)
+│       ├── main.py                 # Captura DHT22 + 3 potenciômetros, análise edge, OLED, LEDs, buzzer e POST HTTP
+│       ├── ssd1306.py              # Driver I²C do display OLED 128x64
+│       └── diagram.json            # Circuito completo para simulação no Wokwi
+├── frontend/                       # Aplicação Web (React + Vite)
+│   ├── vercel.json                 # Suporte a rotas SPA (/login, /dashboard, /chat) na Vercel
+│   └── src/
+│       ├── pages/Login.jsx         # Login com seleção rápida de perfil (Médico / Paciente)
+│       ├── pages/Dashboard.jsx     # Indicadores de risco, gráfico em tempo real, protocolos e trilha de agentes
+│       └── pages/Chat.jsx          # Assistente conversacional integrado aos sinais vitais
+└── mobile/                         # Aplicação Mobile (React Native + Expo Router)
+    ├── app.json                    # Configurado com android.package = "br.com.fiap.cardioia"
+    ├── eas.json                    # Perfil "preview" configurado para geração de .apk na nuvem do Expo
+    └── app/                        # Telas Mobile: login, (tabs)/dashboard e (tabs)/chat
+```
+
+### 🛠️ Instruções de Execução e Instalação
+
+#### 1. Backend Integrador Python (`backend/`)
+```bash
+# 1. Instalar dependências
+pip install -r backend/requirements.txt
+
+# 2. Garantir que o modelo preditivo da Fase 6 esteja treinado
+python backend/bootstrap_model.py
+
+# 3. Iniciar o servidor FastAPI em http://localhost:8000 (documentação interativa em /docs)
+uvicorn cardioia.main:app --reload --port 8000 --app-dir backend
+
+# 4. Executar a suíte de testes automatizados
+pytest backend/tests
+```
+
+#### 2. Aplicação Web (`frontend/`)
+```bash
+cd frontend
+npm install
+npm run dev      # abre em http://localhost:3000 com proxy para http://localhost:8000
+npm run build    # gera o bundle de produção em frontend/dist
+```
+
+#### 3. Aplicativo Mobile e Instalação do `.apk` (`mobile/`)
+```bash
+cd mobile
+npm install
+npx expo start   # desenvolvimento local (Expo Go)
+
+# Gerar o arquivo .apk na nuvem do Expo (EAS Build):
+npx eas-cli login
+npx eas-cli build -p android --profile preview
+```
+**Como instalar o `.apk` no dispositivo Android real:**
+1. Acesse o link do build no dashboard do Expo (ou escaneie o QR Code gerado pelo EAS Build com a câmera do celular).
+2. Baixe o arquivo `.apk` e autorize a instalação de fontes conhecidas caso solicitado pelo Android.
+3. Abra o app **CardioIA**, selecione **Médico** (`medico / cardio123`) ou **Paciente** (`paciente / cardio123`) e valide a atualização dos dados cardíacos em tempo real.
+
+#### 4. Simulação Hardware em MicroPython no Wokwi (`iot/micropython/`)
+1. Abra o projeto no Wokwi (ou importe `iot/micropython/diagram.json`, `iot/micropython/main.py` e `iot/micropython/ssd1306.py`).
+2. Na constante `BACKEND_URL` de `main.py`, informe a URL pública do backend no Render.
+3. Inicie a simulação e altere os potenciômetros de **FC (bpm)**, **SpO₂ (%)**, **PA Sistólica (mmHg)** e a temperatura do **DHT22** para observar a resposta imediata no display OLED, nos LEDs/buzzer e nas interfaces Web/Mobile.
+
+### 📸 Prints Comprobatórios do Deploy Concluído
+
+> *(Substitua ou adicione as capturas de tela abaixo na pasta `assets/` antes da entrega final)*
+- **Deploy Web na Vercel (CI/CD ativo):** `![Deploy Vercel](assets/print-vercel-deploy.png)`
+- **Build do `.apk` no Dashboard do Expo (EAS Build):** `![EAS Build APK](assets/print-expo-eas-apk.png)`
+- **Simulação MicroPython em execução no Wokwi:** `![Wokwi MicroPython](assets/print-wokwi-micropython.png)`
+- **Aplicação Web e Mobile exibindo dados cardíacos em tempo real:** `![Dashboard Web e Mobile](assets/print-dashboard-realtime.png)`
+
+---
 
 ## Parte 1 – Dados Numéricos (IoT)
 

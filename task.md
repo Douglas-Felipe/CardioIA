@@ -1,58 +1,57 @@
-Enunciado de Atividade:
+Enunciado da Atividade:
 
-Dando continuidade ao projeto CardioIA, nesta Fase 5 avançamos para a construção de um Assistente Cardiológico Inteligente e Conversacional, capaz de interagir com o paciente, interpretar informações clínicas e apresentar respostas organizadas e contextualizadas.
+Após percorrer as fronteiras da coleta de dados (Fase 1), diagnóstico automatizado (Fase 2), monitoramento IoT (Fase 3), análise de imagens (Fase 4), assistência conversacional (Fase 5) e, recentemente, a orquestração de sistemas preditivos multiagentes (Fase 6), a Fase 7 marca o ápice da CardioIA como uma Plataforma de Inteligência Cardíaca Total.
 
-Após explorarmos monitoramento, análise de imagens e prototipação visual em fases anteriores, o foco agora se desloca para a comunicação inteligente usando processamento natural da linguagem. Nesse contexto, os conhecimentos trabalhados nas disciplinas, especialmente de Processamento de Linguagem Natural, Chatbots & Virtual Agents – PCV, continuam a se integrar de forma contínua.
+Nesta etapa, o foco deixa de ser o desenvolvimento de módulos isolados e passa a ser a integração transdisciplinar e a materialização da solução. O desafio estratégico é converter a inteligência preditiva e analítica construída na fase anterior em um produto digital funcional, seguro e centrado no usuário. Se na Fase 6 o objetivo era o “Cérebro” da CardioIA (previsão de picos de risco), na Fase 7 o objetivo é o “Corpo” da solução: a interface que conecta o médico e o paciente aos insights de IA em tempo real.
 
-Por exemplo, sabe-se que técnicas de processamento de linguagem natural apoiam a compreensão das mensagens do usuário; os conceitos de automação permitem organizar fluxos de atendimento e resposta; o uso de APIs e serviços facilitam a comunicação entre sistemas; e os fundamentos de bancos de dados sustentam o armazenamento e a recuperação das informações.
-
-E ainda, conteúdos relacionados à IA Generativa, métricas, governança e boas práticas contribuem para tornar o assistente mais consistente, organizado e alinhado a princípios éticos e técnicos.
-
-Portanto, o objetivo deste projeto é simular um assistente que auxilie o paciente no entendimento de informações de saúde, respeitando limites técnicos, éticos e conceituais discutidos ao longo da fase, utilizando exclusivamente abordagens, ferramentas e exemplos apresentados no material didático.
-
-Para contextualizar a evolução do projeto, observe no mapa mental a seguir em que ponto o CardioIA se encontra nesta Fase 5 e como os conhecimentos adquiridos nas fases anteriores sustentam esta etapa.
+A proposta exige que a equipe realize a integração de todos os módulos back-end, front-end, serviços em nuvem, LLMs e sensores em uma única arquitetura funcional. Isso inclui o deploy profissional da aplicação Web, por exemplo, na Vercel ou Render, Netlify, Cloudflare Pages, Firebase Hosting etc. e a distribuição mobile via Expo EAS Build ou outra plataforma de seu interesse, garantindo acessibilidade e usabilidade. Claro que você pode adotar outras formas de deploy. Além disso, avançamos na infraestrutura de hardware, migrando a lógica de microcontroladores para MicroPython, permitindo o uso de dispositivos mais poderosos e flexíveis, como o Raspberry Pi, para processar diagnósticos localmente. É o momento de apresentar a arquitetura final da solução, demonstrando como a IA revoluciona a Cardiologia através de um ecossistema coeso, tecnológico e voltado à salvaguarda de vidas.
 
 Objetivo geral dessa atividade:
 
-Construir um protótipo funcional de Assistente Cardiológico Conversacional (Chatbot) que:
+Desenvolver o MVP final e funcional da plataforma CardioIA, sendo capaz de:
 
-Interaja com o usuário por meio de linguagem natural, simulando um atendimento inicial em saúde.
-Integre serviços de NLP e automação conforme apresentado nas aulas.
-Organize e apresente informações clínicas de forma estruturada e compreensível.
-Utilize uma interface simples para interação com o usuário.
-Trabalho em equipe e colaboração interdisciplinar – recomendamos o desenvolvimento do projeto em grupo de 4 a 5 integrantes, estimulando habilidades de comunicação, cooperação e divisão equilibrada de tarefas. O trabalho em equipe é considerado uma soft skill essencial para o ambiente profissional e acadêmico, e será concedido 1 ponto extra para as equipes que se organizarem dentro dessa estrutura recomendada.
-
+Realizar o deploy completo da aplicação: Web (em alguma plataforma) com CI/CD ativo e Mobile (arquivo .apk via EAS Build).
+Refinar a Experiência do Usuário (UX), focando na usabilidade e no fluxo de informação dos indicadores de risco.
+Integrar todos os módulos técnicos desenvolvidos nas fases anteriores em uma única plataforma orquestrada por Python.
+Evoluir o hardware, simulando o uso de MicroPython em microcontroladores de alto desempenho.
+Trabalho em equipe e colaboração interdisciplinar, recomendamos o desenvolvimento do projeto em grupo de 4 a 5 integrantes, estimulando habilidades de comunicação, cooperação e divisão equilibrada de tarefas. O trabalho em equipe é considerado uma soft skill essencial para o ambiente profissional e acadêmico, e será concedido 1 ponto extra para as equipes que se organizarem dentro dessa estrutura recomendada.
 Ao final desta fase, a equipe terá desenvolvido uma solução prática que demonstra como agentes conversacionais podem ser aplicados em contextos de saúde digital, respeitando boas práticas técnicas e conceituais.
 
-  
-
-Dica: para reforçar a importância da colaboração e entender boas práticas de trabalho em equipe, recomendamos assistir ao curso da Alura “Princípios do trabalho em equipe, relações colaborativas”, disponível na plataforma da Alura: <https://www.alura.com.br/curso-online-principios-trabalho-equipe-relacao-colaborativa>.
-
-   
 
 Atividade detalhada:
 
-PARTE 1 – Assistente Conversacional com NLP
+PARTE 1 – Deploy e Distribuição Profissional (Front-End & Mobile)
 
-Desenvolver um assistente conversacional utilizando os conceitos estudados em aula, adotando como base a plataforma IBM Watson Assistant, conforme apresentado na disciplina PCV.
-Modelar o assistente no Watson Assistant, definindo intents, entities e dialog nodes, com foco em um fluxo de atendimento inicial no contexto de saúde.
-Criar um fluxo de diálogo coerente, com intenções bem definidas, respostas contextualizadas e tratamento básico de exceções.
-Integrar o assistente desenvolvido no Watson Assistant a uma aplicação backend simples (exemplo: Flask), utilizando a API do serviço para permitir a troca de mensagens entre usuário e sistema.
-Utilizar exemplos, arquiteturas e estruturas demonstradas no material didático das disciplinas como referência para a implementação.
+Utilizando as aplicações desenvolvidas, o grupo deve:
+
+Web: publicar a aplicação na Vercel, configurando o vercel.json para suporte a rotas SPA e garantindo que cada push no GitHub inicie um deploy automático (CI/CD).
+Mobile: configurar o app.json e eas.json para realizar o build na nuvem do Expo, gerando um arquivo .apk funcional.
+Validação: testar a aplicação Web e instalar o .apk em um dispositivo real, validando o fluxo de login e visualização dos dados cardíacos.
+  
+
 Entregáveis:
 
-Código-fonte do backend (Python).
-Arquivo de configuração/exportação do assistente (exemplo: JSON).
-Relatório curto (de uma a duas páginas) explicando o funcionamento do fluxo conversacional.
- 
+Repositório GitHub: deve ser privado, porém compartilhado com o tutor e conter o código-fonte completo da aplicação Web (React+Vite) e Mobile (React Native+Expo).
+Arquivos obrigatórios: vercel.json configurado para rotas SPA; app.json com android.package em formato de domínio invertido; e eas.json com o perfil preview para geração de APK.
+README.md: deve conter a URL pública da Vercel, o link direto para o build do .apk no dashboard do Expo (ou QR Code), prints comprobatórios do deploy concluído e instruções de instalação.
+  
 
-PARTE 2 – Interface de Interação com o Usuário
+PARTE 2 – Integração do Ecossistema e Arquitetura Final
 
-Criar uma interface simples para interação com o assistente (HTML ou aplicação básica em React Native).
-Permitir que o usuário envie mensagens e visualize as respostas do assistente.
-Organizar o projeto seguindo a estrutura e boas práticas vistas em aula.
+A equipe deverá construir o núcleo integrador da CardioIA utilizando Python, garantindo os seguintes requisitos técnicos:
+
+Back-end Integrador: desenvolver um serviço em Python que conecte as interfaces (Front-end) aos motores de IA (Modelos Preditivos da Fase 6 e LLMs da Fase 5).
+Transição para MicroPython: converter a lógica de captura e processamento de sensores (temperatura, batimentos simulados) de C/C++ para MicroPython, simulando a execução em dispositivos como ESP32 ou Raspberry Pi no ambiente Wokwi.
+Arquitetura Final: consolidar o fluxo de dados em um ecossistema funcional que suporte o recebimento de sinais e a entrega de recomendações clínicas em tempo real.
+  
+
 Entregáveis:
 
-Interface funcional integrada ao backend.
-Repositório GitHub público com o projeto organizado.
-Vídeo curto (até 3 minutos) demonstrando o funcionamento da interação.
+Código-Fonte Integrado (GitHub): deve ser privado, porém compartilhado com o tutor, incluindo a pasta de Backend contendo os scripts Python de integração e a pasta IoT contendo o script .py para MicroPython.
+Projeto Wokwi: link público da simulação em MicroPython demonstrando a análise de sinais e feedback visual (LED/OLED).
+  
+
+Relatório Técnico (PDF – Máximo de cinco páginas):
+
+Diagrama de Arquitetura Final: desenho técnico detalhando o fluxo: Sensor → MicroPython → Backend Python → APIs de IA → UI.
+Vídeo Demonstrativo (até 5 minutos): demonstração do fluxo fim-a-fim, desde o hardware (Wokwi) até a atualização do dado na URL pública da Vercel/APK.

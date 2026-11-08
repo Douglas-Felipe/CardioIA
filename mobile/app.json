@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "CardioIA",
+    "slug": "cardioia",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "cardioia",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#0284c7"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.fiap.cardioia"
+    },
+    "android": {
+      "package": "br.com.fiap.cardioia",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0284c7"
+      },
+      "permissions": [
+        "INTERNET"
+      ]
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "apiUrl": "https://cardioia-backend.onrender.com"
+    }
+  }
+}
