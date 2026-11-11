@@ -33,7 +33,7 @@ A Fase 7 integra todos os módulos construídos ao longo do projeto em uma arqui
 | Entregável | Link / Localização |
 | :--- | :--- |
 | **🌐 Aplicação Web (Vercel — CI/CD ativo)** | `https://cardioia.vercel.app` *(substitua pela URL final da Vercel após o deploy)* |
-| **⚙️ Backend Integrador Python (Render)** | `https://cardioia-backend.onrender.com` *(substitua pela URL final do Render)* |
+| **⚙️ Backend Integrador Python (Render)** | `https://cardioia-backend-ewbv.onrender.com` *(substitua pela URL final do Render)* |
 | **📱 Build Mobile `.apk` (Expo EAS Dashboard)** | `[COLE_AQUI_O_LINK_DO_BUILD_NO_EXPO_DASHBOARD]` |
 | **🔌 Simulação Hardware MicroPython (Wokwi)** | `[COLE_AQUI_O_LINK_PUBLICO_DO_PROJETO_WOKWI]` |
 | **📄 Relatório Técnico (≤ 5 páginas)** | [`docs/relatorio_tecnico_fase7.md`](docs/relatorio_tecnico_fase7.md) |

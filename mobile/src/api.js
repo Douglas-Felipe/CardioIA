@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 export const API_BASE_URL = (
   process.env.EXPO_PUBLIC_API_URL ||
   Constants.expoConfig?.extra?.apiUrl ||
-  'https://cardioia-backend.onrender.com'
+  'https://cardioia-backend-ewbv.onrender.com'
 ).replace(/\/$/, '');
 
 const TOKEN_KEY = 'cardioia_token';

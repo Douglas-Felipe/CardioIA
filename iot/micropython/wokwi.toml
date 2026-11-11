@@ -1,0 +1,20 @@
+# =============================================================
+# CardioIA - Fase 7 | Configuração Wokwi para MicroPython (ESP32)
+#
+# Observação importante:
+# - No Wokwi Web (https://wokwi.com), este arquivo NÃO é necessário,
+#   pois o próprio `diagram.json` já define `"env": "micropython-20231227-v1.22.0"`.
+# - Para rodar localmente na extensão Wokwi for VS Code:
+#   1. Baixe o firmware oficial MicroPython para ESP32 (.bin / .elf) em:
+#      https://micropython.org/download/ESP32_GENERIC/
+#      (ou do repositório https://github.com/wokwi/micropython-esp32-wokwi-starter)
+#   2. Salve na pasta `iot/micropython/` como `micropython-esp32.bin` (e opcionalmente `.elf`).
+#   3. Inicie o simulador (`F1 -> Wokwi: Start Simulator`) e envie os scripts via `mpremote`:
+#      python -m mpremote connect port:rfc2217://localhost:4000 fs cp ssd1306.py :ssd1306.py + fs cp main.py :main.py + run main.py
+# =============================================================
+
+[wokwi]
+version = 1
+firmware = "micropython-esp32.bin"
+# elf = "micropython-esp32.elf"
+rfc2217ServerPort = 4000

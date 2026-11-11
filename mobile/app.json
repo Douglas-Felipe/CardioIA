@@ -27,7 +27,7 @@
       "expo-router"
     ],
     "extra": {
-      "apiUrl": "https://cardioia-backend.onrender.com"
+      "apiUrl": "https://cardioia-backend-ewbv.onrender.com"
     }
   }
 }

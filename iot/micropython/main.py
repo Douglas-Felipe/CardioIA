@@ -29,22 +29,72 @@ import json
 import select
 
 import dht
+import framebuf
 import network
 import urequests
 from machine import ADC, I2C, PWM, Pin
+from micropython import const
 
-import ssd1306
+try:
+    from ssd1306 import SSD1306_I2C
+except ImportError:
+    # Fallback embutido caso a aba ssd1306.py não tenha sido criada no Wokwi
+    class SSD1306_I2C(framebuf.FrameBuffer):
+        def __init__(self, width, height, i2c, addr=0x3C, external_vcc=False):
+            self.width = width
+            self.height = height
+            self.i2c = i2c
+            self.addr = addr
+            self.external_vcc = external_vcc
+            self.pages = self.height // 8
+            self.buffer = bytearray(self.pages * self.width)
+            self.temp = bytearray(2)
+            self.write_list = [b"\x40", None]
+            super().__init__(self.buffer, self.width, self.height, framebuf.MONO_VLSB)
+            for cmd in (
+                const(0xAE), const(0x20), 0x00, const(0x40), const(0xA1),
+                const(0xA8), self.height - 1, const(0xC8), const(0xD3), 0x00,
+                const(0xDA), 0x02 if self.width > 2 * self.height else 0x12,
+                const(0xD5), 0x80, const(0xD9), 0x22 if self.external_vcc else 0xF1,
+                const(0xDB), 0x30, const(0x81), 0xFF, const(0xA4), const(0xA6),
+                const(0xAD), 0x30, const(0x8D), 0x10 if self.external_vcc else 0x14,
+                const(0xAF),
+            ):
+                self.write_cmd(cmd)
+            self.fill(0)
+            self.show()
+
+        def write_cmd(self, cmd):
+            self.temp[0] = 0x80
+            self.temp[1] = cmd
+            self.i2c.writeto(self.addr, self.temp)
+
+        def show(self):
+            for cmd in (const(0x21), 0, self.width - 1, const(0x22), 0, self.pages - 1):
+                self.write_cmd(cmd)
+            self.write_list[1] = self.buffer
+            self.i2c.writevto(self.addr, self.write_list)
+
 
 # ------------------------------------------------------------- Configuração
 WIFI_SSID = "Wokwi-GUEST"
 WIFI_PASSWORD = ""
-BACKEND_URL = "https://cardioia-backend.onrender.com"  # <- URL pública do Render
+BACKEND_URL = "https://cardioia-backend-ewbv.onrender.com"  # <- URL pública do Render
 DEVICE_TOKEN = "cardioia-device-demo-token"            # <- mesmo valor de DEVICE_TOKEN no backend
 DEVICE_ID = "cardioia-esp32-01"
 
 READ_INTERVAL_MS = 5000      # período de leitura/envio
 HTTP_TIMEOUT_S = 15          # Render free pode "acordar" lentamente
 BUFFER_MAX = 20              # leituras guardadas quando offline
+
+# ------------------------------------------------------------------- Estado
+# Inicia o rádio Wi-Fi antes de configurar ADC/PWM/I2C para acelerar o handshake no Wokwi
+wlan = network.WLAN(network.STA_IF)
+try:
+    wlan.active(True)
+    wlan.connect(WIFI_SSID, WIFI_PASSWORD)
+except OSError:
+    pass
 
 # ------------------------------------------------------------------ Hardware
 dht_sensor = dht.DHT22(Pin(15))
@@ -63,17 +113,17 @@ pot_pa = make_adc(32)
 
 led_green = Pin(26, Pin.OUT)
 led_red = Pin(27, Pin.OUT)
-buzzer = PWM(Pin(25), freq=2000, duty=0)
+buzzer_pin = Pin(25, Pin.OUT, value=0)
+buzzer_pwm = None
 
 i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000)
-oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+oled = SSD1306_I2C(128, 64, i2c)
 
-# ------------------------------------------------------------------- Estado
-wlan = network.WLAN(network.STA_IF)
 simulated_offline = False
 offline_buffer = []
 last_ai = {"classificacao_ml": "--", "probabilidade": None, "nivel": "--"}
 blink_state = False
+wifi_logged = False
 
 poller = select.poll()
 poller.register(sys.stdin, select.POLLIN)
@@ -141,21 +191,60 @@ def read_sensors():
 
 
 # ============================================================== Conectividade
-def connect_wifi(timeout_s=15):
+def estimate_ai_edge(r, level):
+    """Fallback local de risco caso o gateway Wi-Fi do Wokwi esteja indisponível."""
+    score = 0.12
+    if r["systolic"] >= 180 or r["systolic"] < 90:
+        score += 0.42
+    elif r["systolic"] >= 140:
+        score += 0.25
+    if r["bpm"] > 120 or r["bpm"] < 50:
+        score += 0.25
+    elif r["bpm"] > 100 or r["bpm"] < 60:
+        score += 0.12
+    if r["spo2"] < 90:
+        score += 0.22
+    elif r["spo2"] < 95:
+        score += 0.10
+    if r["temperature"] >= 39.0 or r["temperature"] < 35.0:
+        score += 0.15
+    elif r["temperature"] >= 37.6:
+        score += 0.08
+    prob = min(0.98, round(score, 2))
+    if prob >= 0.65 or level == CRITICO:
+        ml_cls = "ALTO RISCO"
+    elif prob >= 0.35 or level == ATENCAO:
+        ml_cls = "RISCO MODERADO"
+    else:
+        ml_cls = "BAIXO RISCO"
+    return {"classificacao_ml": ml_cls, "probabilidade": prob, "nivel": level}
+
+
+def connect_wifi(timeout_s=8):
+    global wifi_logged
     if wlan.isconnected():
+        if not wifi_logged:
+            print("[WiFi] Conectado! IP:", wlan.ifconfig()[0])
+            wifi_logged = True
         return True
-    wlan.active(True)
-    print("[WiFi] Conectando a", WIFI_SSID, end="")
-    wlan.connect(WIFI_SSID, WIFI_PASSWORD)
-    start = time.time()
-    while not wlan.isconnected() and time.time() - start < timeout_s:
+    try:
+        wlan.active(True)
+        if wlan.status() != getattr(network, "STAT_CONNECTING", 1001):
+            wlan.connect(WIFI_SSID, WIFI_PASSWORD)
+        print("[WiFi] Conectando a", WIFI_SSID, end="")
+    except OSError as e:
+        print("\n[WiFi] Aviso ao iniciar conexao:", e)
+
+    start = time.ticks_ms()
+    while not wlan.isconnected() and time.ticks_diff(time.ticks_ms(), start) < timeout_s * 1000:
         print(".", end="")
-        time.sleep(0.5)
+        time.sleep_ms(100)
     print()
     if wlan.isconnected():
         print("[WiFi] Conectado! IP:", wlan.ifconfig()[0])
+        wifi_logged = True
     else:
-        print("[WiFi] Falha ao conectar")
+        print("[WiFi] Aguardando gateway Wokwi (status={}) - operando com resiliencia Edge".format(wlan.status()))
     return wlan.isconnected()
 
 
@@ -198,19 +287,33 @@ def flush_buffer():
 
 
 # ================================================================ Feedback
+def set_buzzer(active):
+    global buzzer_pwm
+    if active:
+        if buzzer_pwm is None:
+            buzzer_pwm = PWM(Pin(25), freq=2000, duty=512)
+        else:
+            buzzer_pwm.duty(512)
+    else:
+        if buzzer_pwm is not None:
+            buzzer_pwm.deinit()
+            buzzer_pwm = None
+            Pin(25, Pin.OUT, value=0)
+
+
 def update_actuators(level):
     global blink_state
     blink_state = not blink_state
     led_green.value(1 if level == NORMAL else 0)
     if level == CRITICO:
         led_red.value(1)
-        buzzer.duty(512 if blink_state else 0)
+        set_buzzer(blink_state)
     elif level == ATENCAO:
         led_red.value(1 if blink_state else 0)
-        buzzer.duty(0)
+        set_buzzer(False)
     else:
         led_red.value(0)
-        buzzer.duty(0)
+        set_buzzer(False)
 
 
 def update_display(r, level):
@@ -254,7 +357,7 @@ def banner():
 
 
 def main():
-    global last_ai
+    global last_ai, wifi_logged
     banner()
     oled.fill(0)
     oled.text("CardioIA", 32, 20)
@@ -285,6 +388,9 @@ def main():
                   + level + (" " + str(alerts) if alerts else ""))
 
             if is_online():
+                if not wifi_logged:
+                    print("[WiFi] Conectado em segundo plano! IP:", wlan.ifconfig()[0])
+                    wifi_logged = True
                 flush_buffer()
                 data = post_telemetry(payload)
                 if data:
@@ -292,12 +398,13 @@ def main():
                     print("[IA] Backend:", data.get("nivel"), "| ML:", data.get("classificacao_ml"),
                           "| prob:", data.get("probabilidade"))
                 else:
+                    last_ai = estimate_ai_edge(reading, level)
                     offline_buffer.append(payload)
             else:
-                if not simulated_offline:
-                    connect_wifi(timeout_s=3)
+                last_ai = estimate_ai_edge(reading, level)
                 offline_buffer.append(payload)
-                print("[OFFLINE] Leitura armazenada no buffer ({} itens)".format(len(offline_buffer)))
+                print("[OFFLINE] Buffer={} | IA Edge={} (prob={})".format(
+                    len(offline_buffer), last_ai["classificacao_ml"], last_ai["probabilidade"]))
 
             if len(offline_buffer) > BUFFER_MAX:
                 offline_buffer.pop(0)  # descarta a mais antiga
