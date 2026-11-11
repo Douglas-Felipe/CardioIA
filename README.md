@@ -9,7 +9,7 @@
 # CardioIA
 
 ## Vídeos:
-- **Fase 7 (MVP Final Integrado):** `[COLE_AQUI_O_LINK_DO_YOUTUBE_DA_FASE_7]`
+- Fase 7 (MVP Final Integrado): [link](link)
 - Fase 6 (Sistema Multiagente): [https://youtu.be/mDPamQwldME](https://youtu.be/mDPamQwldME)
 - Fase 5 (Assistente Conversacional): [https://youtu.be/mb6T__vdnBE](https://youtu.be/mb6T__vdnBE)
 
