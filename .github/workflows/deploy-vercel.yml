@@ -1,0 +1,135 @@
+name: CI/CD — Build & Deploy Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VITE_API_URL: ${{ vars.VITE_API_URL || secrets.VITE_API_URL || 'https://cardioia-backend-ewbv.onrender.com' }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1. CI: Testes automatizados do Backend Python (FastAPI + ML Fase 6)
+  # ---------------------------------------------------------------------------
+  test-backend:
+    name: Testes Backend (FastAPI & IA)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "backend/requirements.txt"
+
+      - name: Instalar dependências do Backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Garantir artefato do modelo preditivo (Fase 6)
+        run: python backend/bootstrap_model.py
+
+      - name: Executar suíte de testes (Pytest)
+        run: pytest backend/tests -v
+
+  # ---------------------------------------------------------------------------
+  # 2. CI: Build e validação do Frontend Web (React + Vite)
+  # ---------------------------------------------------------------------------
+  build-frontend:
+    name: Build Frontend (React + Vite)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Instalar dependências do Frontend
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Gerar bundle de produção (Vite)
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Publicar artefato do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # 3. CD: Deploy automático na Vercel (Preview em PRs / Produção na main)
+  # ---------------------------------------------------------------------------
+  deploy-vercel:
+    name: Deploy na Vercel
+    needs: [test-backend, build-frontend]
+    runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
+    environment:
+      name: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'Production' || 'Preview' }}
+      url: ${{ steps.deploy.outputs.url || steps.deploy_preview.outputs.url }}
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Instalar Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Baixar configurações do projeto da Vercel (Preview)
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Baixar configurações do projeto da Vercel (Production)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build do projeto com Vercel CLI (Preview)
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build do projeto com Vercel CLI (Production)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Prebuilt na Vercel (Preview)
+        id: deploy_preview
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
+        run: |
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "🚀 Preview publicado em: $url"
+
+      - name: Deploy Prebuilt na Vercel (Production)
+        id: deploy
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "🚀 Produção publicada em: $url"
